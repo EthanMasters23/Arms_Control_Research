@@ -6,7 +6,7 @@ class CleanData():
     def __init__(self):
         self.fetched_data = {}
         self.cleaned_data = {}
-        self.logger = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+        self.logger = logging.getLogger(type(self).__name__)
 
     def format_data_dict(self):
         if not self.fetched_data:

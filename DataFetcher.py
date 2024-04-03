@@ -17,47 +17,63 @@ class FetchData(CleanData):
         self.FILTER_CONDITION = filter_condition
 
         self.missing_data = []
-        self.logger = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+        self.logger = logging.getLogger(type(self).__name__)
 
     def fetch_article_data(self):
         for year in tqdm(range(self.START_YEAR, self.END_YEAR + 1)):
             self.fetched_data[year] = {}
             for month in tqdm(range(1, 13)):
-                response = False
-                for _ in range(3):
-                    try:
-                        response = requests.get(f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key={self.API_KEY}')
-                        if response.status_code == 200:
-                            response = response.json()
-                            break 
-                        elif response.status_code == 403:
-                            self.logger.error(f"Forbidden error (status code - {response.status_code}). Retrying...")
-                        else:
-                            self.logger.error(f"Unknown error (status code - {response.status_code}). Retrying...")
-                    except requests.exceptions.RequestException as e:
-                        self.logger.error(f"Network error: {str(e)} Retrying...")
-                    time.sleep(10)
-
-                if not response:
-                    self.logger.error(f"Failed to fetch data for {year}, {month}. Skipping...")
-                    self.missing_data += [[year,month]]
-                    continue
-
-                filtered_response = (
-                    [article for article in response["response"]["docs"] if self.filter_article(article)]
-                    if self.ARTICLE_CONDITION 
-                    else [article for article in response["response"]["docs"]]
-                )
-
-                self.fetched_data[year][month] = (
-                    [article for article in filtered_response if self.topic_filter_article(article)]
-                    if self.FILTER_CONDITION
-                    else filtered_response
-                )
-
+                self._process_response(year, month)
                 time.sleep(2)
+
+        if self.missing_data:
+            self.logger.info(f"Months of missing data: {self.missing_data}.")
+            with open(f"assets/Article_Data_RegexMethod_Missing_Data_({self.START_YEAR}-{self.END_YEAR}).json", 'w') as f:
+                json.dump(self.missing_data, f)
+
+    def fetch_missing_data(self):
+        for year, month in self.missing_data:
+            self._process_response(year, month)
+            time.sleep(60)
+
+    def _process_response(self, year, month):
+        response = False
+        for _ in range(3):
+            try:
+                resp = requests.get(f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key={self.API_KEY}')
+                if resp.status_code == 200:
+                    response = resp.json()
+                    break
+                elif resp.status_code == 403:
+                    self.logger.error(f"Forbidden error (status code - {resp.status_code}). Retrying...")
+                else:
+                    self.logger.error(f"Unknown error (status code - {resp.status_code}). Testing response...")
+                    test_resp = resp.json()
+                    if test_resp["response"]["docs"]:
+                        response = test_resp
+                        break
+            except requests.exceptions.RequestException as e:
+                self.logger.error(f"Possible network error: {str(e)} Retrying...")
+            time.sleep(10)
+
+        if not response:
+            self.logger.error(f"Failed to fetch data for {year}, {month}. Skipping...")
+            self.missing_data += [[year,month]]
+            return
+
+        filtered_response = (
+            [article for article in response["response"]["docs"] if self._filter_article(article)]
+            if self.ARTICLE_CONDITION 
+            else [article for article in response["response"]["docs"]]
+        )
+
+        self.fetched_data[year][month] = (
+            [article for article in filtered_response if self._topic_filter_article(article)]
+            if self.FILTER_CONDITION
+            else filtered_response
+        )
     
-    def filter_article(self, article):
+    def _filter_article(self, article):
         pub_date = article['pub_date']
         pub_date = re.search(r'(\d{4})-\d{2}-\d{2}T',pub_date).group(1)
         article["print_page_found"] = True
@@ -67,12 +83,12 @@ class FetchData(CleanData):
                     return article
             except: 
                 article["print_page_found"] = False
-                self.logger.warning(f"Failed to find 'print_page' tag from date: {pub_date}. For article information vist {article['web_url']}")
+                # self.logger.warning(f"Failed to find 'print_page' tag from date: {pub_date}. For article information vist {article['web_url']}")
                 try:
                     if (article['news_desk'] == 'Foreign Desk' or article['news_desk'] == 'Foreign') or (article['news_desk'] == 'National Desk' or article['news_desk'] == 'National'):
                         return article
                 except:
-                    self.logger.warning(f"Failed to find other relevant tags ('new_desk') from date: {pub_date}. For article information vist {article['web_url']}")
+                    # self.logger.warning(f"Failed to find other relevant tags ('new_desk') from date: {pub_date}. For article information vist {article['web_url']}")
                     return article
         else:
             try:
@@ -84,7 +100,7 @@ class FetchData(CleanData):
                 return article
 
     @staticmethod
-    def topic_filter_article(article):
+    def _topic_filter_article(article):
         pub_date = article['pub_date']
         pub_date = re.search(r'(\d{4})-\d{2}-\d{2}T',pub_date).group(1)
 
