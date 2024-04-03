@@ -1,7 +1,6 @@
 
 ### - IMPORTS - ###
 
-import json
 from pprint import pprint
 import pandas as pd
 import numpy as np
@@ -17,7 +16,6 @@ from dash import html
 from dash import dcc
 from dash import dash_table, callback
 from dash.dependencies import Output, Input
-from dash.exceptions import PreventUpdate
 
 from plotly.subplots import make_subplots
 
@@ -275,9 +273,9 @@ app.layout = html.Div(
     Output("graph_stat", "figure")
     ],
     [
-        Input("year-filter", "value"),
-        Input("month-filter", "value"),
-        Input("radio", "value"),
+    Input("year-filter", "value"),
+    Input("month-filter", "value"),
+    Input("radio", "value"),
     ],
 )
 

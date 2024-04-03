@@ -318,13 +318,14 @@ def function_call():
     end_date = 20230120 # end date for data collection fromat : {YYYYMMDD}
     output_data_thirteenth_period = execute(begin_date,end_date)
 
-    final_output = pd.concat([output_data_first_period,output_data_second_period,
-                              output_data_third_period,output_data_fourth_period,
-                              output_data_fifth_period, output_data_sixth_period,
-                              output_data_seventh_period,output_data_eigth_period,
-                              output_data_ninth_period,output_data_tenth_period,
-                              output_data_eleventh_period,output_data_twelvth_period,
-                              output_data_thirteenth_period]).rename_axis(['Year','Publication Date']).sort_index()
+    final_output = pd.concat([
+        output_data_first_period,output_data_second_period,
+        output_data_third_period,output_data_fourth_period,
+        output_data_fifth_period, output_data_sixth_period,
+        output_data_seventh_period,output_data_eigth_period,
+        output_data_ninth_period,output_data_tenth_period,
+        output_data_eleventh_period,output_data_twelvth_period,
+        output_data_thirteenth_period]).rename_axis(['Year','Publication Date']).sort_index()
 
     ### end test case for query capture individual test 15
 

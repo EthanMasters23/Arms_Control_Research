@@ -1,11 +1,9 @@
 from tqdm import tqdm
 import requests
 import pandas as pd
-import re
 import time
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
-from pprint import pprint
 import json
 
 
@@ -53,14 +51,26 @@ class FetchArticleStats:
 
                 time.sleep(2)
             print(f"Finished collecting article stats from {year}.")
-
         print("\n"*5)
-        with open("assets/NYT_API_Article_Stats_({self.START_YEAR}-{self.END_YEAR}).json", 'w') as file:
-            json.dump(self.article_stats, file)
+
+    def convert_dict_to_decades(self):
+
+        decade_dict = {}
+        for keys, values in self.article_stats.items():
+            decade_dict[keys] = {}
+            i = 0
+            for key, value in values.items():
+                if i > 10:
+                    break
+                decade_dict[keys][key] = value
+                if 'None' in decade_dict[keys][key].keys():
+                    decade_dict[keys][key].pop('None')
+                i += 1
+
+        return decade_dict
 
     def view_article_stats(self):
-        with open("assets/NYT_API_Article_Stats_({self.START_YEAR}-{self.END_YEAR}).json", 'r') as file:
-            reloaded_data = json.load(file)
+        reloaded_data = self.convert_dict_to_decades()
 
         for data_dict, title in [(reloaded_data['keywords'], 'Keywords'), (reloaded_data['print_page'], 'Print Pages'),
                              (reloaded_data['news_desk'], 'News Desks'), (reloaded_data['section_name'], 'Section Names'),
@@ -71,7 +81,19 @@ class FetchArticleStats:
                 df = pd.DataFrame.from_dict({year: data}, orient='index')
                 fig.add_trace(go.Bar(x=df.columns, y=df.values.flatten(), name=year), row=1, col=i+1)
 
-            fig.update_layout(title=title, showlegend=False)
-            fig.update_xaxes(title_text="Year")
-            fig.update_yaxes(title_text="Frequency")
+                fig.update_layout(title=title, showlegend=False)
+                fig.update_xaxes(title_text="Year")
+                fig.update_yaxes(title_text="Frequency")
+
             fig.show()
+
+    def save_article_stats(self):
+        with open(f"assets/NYT_API_Article_Stats_({self.START_YEAR}-{self.END_YEAR}).json", 'w') as file:
+            json.dump(self.article_stats, file)
+
+    def reload_article_stats(self):
+        with open(f"assets/NYT_API_Article_Stats_({self.START_YEAR}-{self.END_YEAR}).json", 'r') as file:
+            self.article_stats = json.load(file)
+
+
+

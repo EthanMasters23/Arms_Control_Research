@@ -1,52 +1,61 @@
 from tqdm import tqdm
 import requests
-import pandas as pd
 import re
 import time
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
-from pprint import pprint
 import json
+import logging
 
-class FetchData:
-    def __init__(self, apiKey, startYear, endYear, article_condition, filter_condition):
+from DataCleaner import CleanData
+
+class FetchData(CleanData):
+    def __init__(self, apiKey, startYear, endYear, article_condition = True, filter_condition = True):
+        super().__init__()
         self.API_KEY = apiKey
         self.START_YEAR = startYear
         self.END_YEAR = endYear
         self.ARTICLE_CONDITION = article_condition
         self.FILTER_CONDITION = filter_condition
 
-        self.fetched_data = None
+        self.missing_data = []
+        self.logger = logging.getLogger(__name__ + '.' + self.__class__.__name__)
 
     def fetch_article_data(self):
-        nytData = {}
-
         for year in tqdm(range(self.START_YEAR, self.END_YEAR + 1)):
-            print(f"Starting article collection for {year}...")
-            nytData[year] = {}
+            self.fetched_data[year] = {}
             for month in tqdm(range(1, 13)):
-                response = requests.get(f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key={self.API_KEY}')
+                response = False
+                for _ in range(3):
+                    try:
+                        response = requests.get(f'https://api.nytimes.com/svc/archive/v1/{year}/{month}.json?api-key={self.API_KEY}')
+                        if response.status_code == 200:
+                            response = response.json()
+                            break 
+                        elif response.status_code == 403:
+                            self.logger.error(f"Forbidden error (status code - {response.status_code}). Retrying...")
+                        else:
+                            self.logger.error(f"Unknown error (status code - {response.status_code}). Retrying...")
+                    except requests.exceptions.RequestException as e:
+                        self.logger.error(f"Network error: {str(e)} Retrying...")
+                    time.sleep(10)
 
-                if response.status_code == 200: response = response.json()
-                elif response.status_code == 401: raise Exception("Unauthorized request, check api-key is set.")
-                elif response.status_code == 429: raise Exception("Too many requests. Reached your per minute or per day rate limit.")
-                else: raise Exception("An error occurred:", response.status_code)
+                if not response:
+                    self.logger.error(f"Failed to fetch data for {year}, {month}. Skipping...")
+                    self.missing_data += [[year,month]]
+                    continue
 
                 filtered_response = (
                     [article for article in response["response"]["docs"] if self.filter_article(article)]
                     if self.ARTICLE_CONDITION 
                     else [article for article in response["response"]["docs"]]
                 )
-                nytData[year][month] = (
+
+                self.fetched_data[year][month] = (
                     [article for article in filtered_response if self.topic_filter_article(article)]
                     if self.FILTER_CONDITION
                     else filtered_response
                 )
-                
-                time.sleep(2)
-            print(f"Finished collecting articles from {year}.")
 
-        self.fetched_data =  nytData
+                time.sleep(2)
     
     def filter_article(self, article):
         pub_date = article['pub_date']
@@ -54,19 +63,28 @@ class FetchData:
         article["print_page_found"] = True
         if int(pub_date) <= 1980:
             try:
-                if article["print_page"] == "1": return article
+                if article["print_page"] == "1":
+                    return article
             except: 
                 article["print_page_found"] = False
-                return article
-                # print(f"\t\tFailed to find 'print_page' tag from date: {pub_date}. For article information vist {article['web_url']}")
+                self.logger.warning(f"Failed to find 'print_page' tag from date: {pub_date}. For article information vist {article['web_url']}")
+                try:
+                    if (article['news_desk'] == 'Foreign Desk' or article['news_desk'] == 'Foreign') or (article['news_desk'] == 'National Desk' or article['news_desk'] == 'National'):
+                        return article
+                except:
+                    self.logger.warning(f"Failed to find other relevant tags ('new_desk') from date: {pub_date}. For article information vist {article['web_url']}")
+                    return article
         else:
             try:
                 if (article['news_desk'] == 'Foreign Desk' or article['news_desk'] == 'Foreign') or (article['news_desk'] == 'National Desk' or article['news_desk'] == 'National'):
                     if article["print_page"] == "1":
                         return article
-            except: print(f"\t\tFailed to find other relevant tags from date: {pub_date}. For article information vist {article['web_url']}")
+            except:
+                self.logger.warning(f"Failed to find other relevant tags ('new_desk' & 'print_page') from date: {pub_date}. For article information vist {article['web_url']}")
+                return article
 
-    def topic_filter_article(self, article):
+    @staticmethod
+    def topic_filter_article(article):
         pub_date = article['pub_date']
         pub_date = re.search(r'(\d{4})-\d{2}-\d{2}T',pub_date).group(1)
 
@@ -138,10 +156,15 @@ class FetchData:
                 if re.search(fr"{word}",article_subject):
                     return article
 
-                        
-    def get_data_from_json(self, filePath):
-        return pd.read_json(filePath)
+    def save_data(self):
+        with open(f"assets/Article_Data_RegexMethod_Raw_({self.START_YEAR}-{self.END_YEAR}).json", 'w') as file:
+            json.dump(self.fetched_data, file)
+
+    def reload_data(self):
+        with open(f"assets/Article_Data_RegexMethod_Raw_({self.START_YEAR}-{self.END_YEAR}).json", 'r') as file:
+            self.fetched_data = json.load(file)
 
     def get_data(self):
-        if self.fetched_data == None: raise Exception("Must call on .fetch_article_data() first to generate data.")
+        if not self.fetched_data:
+            raise Exception("Must call method fetch_article_data() first to generate data.")
         return self.fetched_data
