@@ -11,7 +11,7 @@ class ApiMethodPipeline:
     def __init__(self):
         self.API_KEY = "9jleO955LNYEMxbaH5A49adGcBJle43K"
         self.START_DATE = 1945
-        self.END_DATE = 2023
+        self.END_DATE = 2024
         self.NYT_DATA = pd.DataFrame()
         self.logger = logging.getLogger(type(self).__name__)
 
@@ -61,9 +61,9 @@ if __name__ == '__main__':
 
     pipeline = ApiMethodPipeline()
     pipeline.pull_data()
-    pipeline.reload_data()
+    # pipeline.reload_data()
     pipeline.graph_data()
 
     end_time = time.time()
     total_time = end_time - start_time
-    logger.info(f"Total runtime: {total_time:.2f}")
+    logger.info(f"Total runtime: {total_time:.2f}" + "\n"*4)

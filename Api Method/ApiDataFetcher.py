@@ -20,10 +20,12 @@ class ApiDataFetcher(CleanData):
         self.missing_data = []
 
     def fetch_data(self):
-        response_field = "headline,snippet,pub_date,web_url,keywords,news_desk,print_section,print_page,document_type,section_name"
+        response_field = "headline,pub_date,web_url,keywords"
         search_terms = ["arms control", "weapons disarmament", "arms reduction", "nuclear disarmament", "nuclear arms control", "nuclear proliferation", "nuclear non-proliferation treaty", "nuclear deterrence", "nuclear proliferation treaty"]
         contextual_terms = ["nuclear weapons", "atomic weapons", "nuclear warheads", "strategic arms reduction", "treaty on the non-proliferation of nuclear weapons", "disarmament agreements", "nuclear testing", "nuclear policy", "nuclear security", "nuclear strategy", "nuclear proliferation risks", "nuclear deterrence policy", "nuclear security measures", "nuclear threat assessment"]
 
+        self.logger.info(f"Search terms: {search_terms}.")
+        self.logger.info(f"Contexual terms: {contextual_terms}.")
         for year in tqdm(range(self.START_DATE, self.END_DATE + 1)):
             begin_date = f"{year}0101"
             end_date = f"{year}1231"
@@ -59,10 +61,10 @@ class ApiDataFetcher(CleanData):
         if hits > 1000:
             self._handle_large_response(url, hits)
         elif hits > 10:
-            self.fetched_data += [article for article in response["response"]["docs"]]
+            self.fetched_data += [article for article in response["response"]["docs"] if article not in self.fetched_data]
             self._paginate_pages(url, hits)
         elif hits > 0:
-            self.fetched_data += [article for article in response["response"]["docs"]]
+            self.fetched_data += [article for article in response["response"]["docs"] if article not in self.fetched_data]
 
     def _process_response(self, url):
         pattern_begin = r'&begin_date=(\d{8})&'
@@ -88,11 +90,11 @@ class ApiDataFetcher(CleanData):
         pattern_end = r'&end_date=(\d{8})&'
         begin_date = re.search(pattern_begin, url).group(1)
         end_date = re.search(pattern_end, url).group(1)
+        begin_date_dt = datetime.datetime.strptime(begin_date, "%Y%m%d")
+        end_date_dt = datetime.datetime.strptime(end_date, "%Y%m%d")
         time_factor = 2
 
-        while hits > 1000:
-            begin_date_dt = datetime.datetime.strptime(begin_date, "%Y%m%d")
-            end_date_dt = datetime.datetime.strptime(end_date, "%Y%m%d")
+        while begin_date_dt.month != end_date_dt.month:
             new_end_date_dt = begin_date_dt + (end_date_dt - begin_date_dt) / (time_factor)
             new_end_date = new_end_date_dt.strftime("%Y%m%d")
             url = re.sub(r'begin_date=\d{8}', f'begin_date={begin_date}', url)
@@ -100,17 +102,21 @@ class ApiDataFetcher(CleanData):
             response = self._process_response(url)
 
             if not response:
-                self.logger.error(f"Failed to fetch data for (({begin_date} - {new_end_date}) - {end_date}). Skipping...")
-                break
+                self.logger.error(f"\tFailed to fetch large data response for (({begin_date_dt.strftime('%Y%m%d')} - {new_end_date}) - {end_date}). Skipping...")
+                return
 
             hits = response['response']['meta']['hits']
             if hits <= 1000:
+                time_factor = 2
                 self._fetch_articles(url)
-                url = re.sub(r'begin_date=\d{8}', f'begin_date={new_end_date}', url)
-                url = re.sub(r'end_date=\d{8}', f'end_date={end_date}', url)
-                self._fetch_articles(url)
+                begin_date_dt = end_date_dt
+                end_date_dt = datetime.datetime.strptime(end_date, "%Y%m%d")
+            else:
+                time_factor += 1
 
-            time_factor += 1
+            if time_factor >= 6:
+                self.logger.warning("Maximum iterations reached without satisfying loop condition.")
+                break
 
     def _paginate_pages(self, url, total_hits):
         pattern = r"&page=\d+&"
@@ -119,7 +125,7 @@ class ApiDataFetcher(CleanData):
             response = self._process_response(url)
             if not response:
                 continue
-            self.fetched_data += [article for article in response["response"]["docs"]]
+            self.fetched_data += [article for article in response["response"]["docs"] if article not in self.fetched_data]
 
     def save_data(self):
         with open(f"assets/Article_Data_ApiMethod_Raw_({self.START_DATE}-{self.END_DATE}).json", 'w') as file:

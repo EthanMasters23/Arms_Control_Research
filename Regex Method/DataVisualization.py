@@ -9,7 +9,6 @@ class DataGrapher:
     def group_by_year(self):
         self.input_df = pd.DataFrame(self.input_df.groupby(level=['Year']).size()).reset_index(inplace=True)
         self.input_df.columns = ["Year","Article Count"]
-        self.plot_time_series(self.input_df)
 
     def plot_time_series(self):
         template = "plotly_dark"

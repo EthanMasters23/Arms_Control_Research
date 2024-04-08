@@ -38,12 +38,12 @@ class ArticleCount:
             self.logger.error(f"Error{time.time}: {ERROR}")
             self.logger.error(f"Could not collect data from {year}")
 
-    def save_article_total(self):
-        with open("assets/NYT_Total_Article_Count.json", "wb") as f:
+    def save_articles_total(self):
+        with open(f"assets/NYT_Total_Article_Count_({self.START_YEAR}-{self.END_YEAR}).json", "wb") as f:
             pickle.dump(self.article_data, f)
 
     def load_articles_total(self):
-        with open("assets/NYT_Total_Article_Count.json", "rb") as f:
+        with open(f"assets/NYT_Total_Article_Count_({self.START_YEAR}-{self.END_YEAR}).json", "rb") as f:
             self.article_data = pickle.load(f)
 
     def to_dataframe(self):
@@ -55,7 +55,7 @@ class ArticleCount:
 if __name__ == "__main__":
     pipeline = ArticleCount()
     pipeline.fetch_article_count()
-    pipeline.save_article_total()
+    pipeline.save_articles_total()
     pipeline.to_dataframe()
     pipeline.to_json()
 
