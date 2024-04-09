@@ -3,16 +3,16 @@ import logging
 import time
 import pandas as pd
 
-from DataFetcher import FetchData
-from ArticleStats import FetchArticleStats
-from DataVisualization import DataGrapher
+from RegexDataFetcher import FetchData
+from ArticleStatsFetcher import FetchArticleStats
+from lib.DataVisualization import DataGrapher
 
 
 class RegexMethodPipeline():
-    def __init__(self):
-        self.API_KEY = "9jleO955LNYEMxbaH5A49adGcBJle43K"
-        self.START_YEAR = 1945
-        self.END_YEAR = 2024
+    def __init__(self, API_KEY, START_YEAR, END_YEAR):
+        self.API_KEY = API_KEY
+        self.START_YEAR = START_YEAR
+        self.END_YEAR = END_YEAR
         self.logger = logging.getLogger(type(self).__name__)
         self.NYT_DATA = pd.DataFrame()
 
@@ -46,7 +46,8 @@ class RegexMethodPipeline():
         fetcher = FetchArticleStats(
                 self.API_KEY,
                 self.START_YEAR,
-                self.END_YEAR)
+                self.END_YEAR
+                )
         self.logger.info('Running Article Statistics...')
         fetcher.get_article_stats()
         fetcher.save_article_stats()
@@ -89,7 +90,11 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     start_time = time.time()
 
-    pipeline = RegexMethodPipeline()
+    pipeline = RegexMethodPipeline(
+        API_KEY = "9jleO955LNYEMxbaH5A49adGcBJle43K",
+        START_YEAR = 1945,
+        END_YEAR = 2024
+    )
     pipeline.run_main()
     pipeline.graph_data()
 

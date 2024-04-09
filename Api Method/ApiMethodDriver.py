@@ -4,14 +4,14 @@ import logging
 import time
 
 from ApiDataFetcher import ApiDataFetcher
-from DataVisualization import DataGrapher
+from lib.DataVisualization import DataGrapher
 
 
 class ApiMethodPipeline:
-    def __init__(self):
-        self.API_KEY = "9jleO955LNYEMxbaH5A49adGcBJle43K"
-        self.START_DATE = 1945
-        self.END_DATE = 2024
+    def __init__(self, API_KEY, START_DATE, END_DATE):
+        self.API_KEY = API_KEY
+        self.START_DATE = START_DATE
+        self.END_DATE = END_DATE
         self.NYT_DATA = pd.DataFrame()
         self.logger = logging.getLogger(type(self).__name__)
 
@@ -59,9 +59,16 @@ if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     start_time = time.time()
 
-    pipeline = ApiMethodPipeline()
-    pipeline.pull_data()
-    # pipeline.reload_data()
+    pipeline = ApiMethodPipeline(
+        API_KEY = "9jleO955LNYEMxbaH5A49adGcBJle43K",
+        START_DATE = 1945,
+        END_DATE = 1946
+    )
+
+    # - class methods - #
+    # pipeline.pull_data()
+    pipeline.reload_data()
+    print(pipeline.NYT_DATA)
     pipeline.graph_data()
 
     end_time = time.time()

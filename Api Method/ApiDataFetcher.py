@@ -1,10 +1,9 @@
 # Api Data Fetcher
-import pandas as pd
 import time
 import logging
 import re
 import requests
-from DataCleaner import CleanData
+from lib.DataCleaner import CleanData
 import datetime
 import json
 from tqdm import tqdm
@@ -79,9 +78,9 @@ class ApiDataFetcher(CleanData):
                 time.sleep(2 * attempt + 2)
                 return response
             except (requests.RequestException, ValueError) as e:
-                self.logger.error(f"Error fetching data: {e}")
+                self.logger.error(f"Error fetching data retrying... : {e}")
             time.sleep(2 * attempt + 2)
-        self.logger.error(f"Failed to fetch data from {begin_date} - {end_date}")
+        self.logger.error(f"Error failed to fetch data from {begin_date} - {end_date} with url: {url}")
         self.missing_data += [[begin_date, end_date]]
         return None
 

@@ -19,8 +19,6 @@ from dash.dependencies import Output, Input
 
 from plotly.subplots import make_subplots
 
-from nyt_article_research import *
-
 ########### - GUI - #############
 
 cwd = os.getcwd()
