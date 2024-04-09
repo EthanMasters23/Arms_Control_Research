@@ -12,15 +12,15 @@ git clone https://github.com/username/project.git
 python -m venv venv
 source venv/bin/activate
 
-pip install -r requirements.txt
+python3 setup.py install
 ```
-3. Install dependencies:
-
 
 ## Usage
 
 
 ## Dependencies
+
+Dependencies can found in the requirements.txt
 
 
 ## Project Structure
