@@ -1,0 +1,5 @@
+2024-04-09 06:57:16,225 - INFO - ApiMethodPipeline - Starting Regex Method Article Collection (1945-1946)...
+2024-04-09 06:57:16,225 - INFO - ApiDataFetcher - Search terms: ['arms control', 'weapons disarmament', 'arms reduction', 'nuclear disarmament', 'nuclear arms control', 'nuclear proliferation', 'nuclear non-proliferation treaty', 'nuclear deterrence', 'nuclear proliferation treaty'].
+2024-04-09 06:57:16,225 - INFO - ApiDataFetcher - Contexual terms: ['nuclear weapons', 'atomic weapons', 'nuclear warheads', 'strategic arms reduction', 'treaty on the non-proliferation of nuclear weapons', 'disarmament agreements', 'nuclear testing', 'nuclear policy', 'nuclear security', 'nuclear strategy', 'nuclear proliferation risks', 'nuclear deterrence policy', 'nuclear security measures', 'nuclear threat assessment'].
+2024-04-09 07:01:16,189 - INFO - ApiMethodPipeline - Number of Years: 2 Number of Articles: 401.
+2024-04-09 07:01:16,189 - INFO - ApiMethodPipeline - Finished Regex Method Article Collection (1945-1946).

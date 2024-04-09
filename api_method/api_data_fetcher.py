@@ -139,8 +139,11 @@ class ApiDataFetcher(CleanData):
 
     def reload_data(self):
         file_path = os.path.join(os.path.dirname(__file__), '..', 'assets', f"Article_Data_ApiMethod_Raw_({self.START_DATE}-{self.END_DATE}).json")
-        with open(file_path, 'r') as file:
-            self.fetched_data = json.load(file)
+        try:
+            with open(file_path, 'r') as file:
+                self.fetched_data = json.load(file)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"File not found: {file_path}")
 
     def get_data(self):
         if not self.fetched_data:

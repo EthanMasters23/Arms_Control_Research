@@ -54,9 +54,6 @@ class ApiMethodPipeline:
         grapher.group_by_year()
         grapher.plot_time_series()
 
-        
-
-
 
 if __name__ == '__main__':
     logging.basicConfig(filename='api_method_pipeline_log.log',
@@ -72,7 +69,7 @@ if __name__ == '__main__':
     )
 
     # - class methods - #
-    # pipeline.run()
+    pipeline.run()
     pipeline.load_data()
     print(pipeline.NYT_DATA)
     pipeline.graph_data()

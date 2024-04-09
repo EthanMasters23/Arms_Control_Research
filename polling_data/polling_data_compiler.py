@@ -9,12 +9,12 @@ class PollingDataCompiler:
     def __init__(self, FILE):
         self.polling_data = pd.read_csv(FILE)
 
-    def run_main(self):
+    def run(self):
         self.isolate_surveys()
         self.save_polling_data()
         self.data_visualization()
 
-    def run_reload(self):
+    def reload(self):
         self.reload_polling_data()
         self.data_visualization()
     
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     caller = PollingDataCompiler(
         FILE = os.path.join(os.path.dirname(__file__), '..', 'assets', "roper-folder-toplines-asof-20230127.csv")
     )
-    caller.run_reload()
+    caller.run()

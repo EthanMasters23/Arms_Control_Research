@@ -50,8 +50,11 @@ class FetchTotalArticles:
 
     def load_articles_total(self):
         file_path = os.path.join(os.path.dirname(__file__), '..', 'assets', f"NYT_Total_Article_Count_({self.START_YEAR}-{self.END_YEAR}).json")
-        with open(file_path, "r") as f:
-            self.article_data = json.load(f)
+        try:
+            with open(file_path, "r") as f:
+                self.article_data = json.load(f)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"File not found: {file_path}")
 
     def to_dataframe(self):
         self.article_data = pd.DataFrame.from_dict(self.article_data, orient='index')
@@ -62,7 +65,10 @@ class FetchTotalArticles:
 
     def from_json(self):
         file_path = os.path.join(os.path.dirname(__file__), '..', 'assets', f"NYT_Total_Article_Count_DataFrame_({self.START_YEAR}-{self.END_YEAR}).json")
-        self.article_data = pd.read_json(file_path)
+        try:
+            self.article_data = pd.read_json(file_path)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"File not found: {file_path}")
 
     def get_article_data(self):
         return self.article_data
