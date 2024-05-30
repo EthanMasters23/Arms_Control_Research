@@ -73,8 +73,6 @@ Arms Control Project/
 
 This application analyzes public opinion research data and provides interactive visualizations to explore the trends.
 
-## Dash App Showcase
-
 ### Description
 This Dash app allows users to search for public opinion research data by year and month. It provides interactive graphs and charts to visualize the data dynamically.
 
@@ -84,10 +82,6 @@ This Dash app allows users to search for public opinion research data by year an
 - [Demo Scripts](demo_scripts/)
 - [Documentation](docs/)
 
-Feel free to explore the app and provide feedback!
-
-
-## Contributing
 
 
 ## License
