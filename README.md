@@ -5,7 +5,7 @@ This python program allows for the collection and analysis of media and survey d
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/username/project.git
+git clone [https://github.com/EthanMasters23/project.git](https://github.com/EthanMasters23/ArmsControlProject.git)
 
 2. Create and activate a virtual environment:
 ```bash
