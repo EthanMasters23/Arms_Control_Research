@@ -1,6 +1,6 @@
 # Project Name
 
-Short project description goes here.
+This python program allows for the collection and analysis of media and survey data related to arms control agreements to contribute to a research study on the analysis of the successors and failures of such agreements.
 
 ## Installation
 
