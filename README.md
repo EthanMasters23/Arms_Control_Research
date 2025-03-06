@@ -1,72 +1,28 @@
-# Arms Control Research
+# Arms Control Research: Public Opinion and Policy Alignment
 
-This python program allows for the collection and analysis of media and survey data related to arms control agreements to contribute to a research study on the analysis of the successors and failures of such agreements.
+## Overview
 
-## Installation
+This repository contains the research project *"Public Opinion and Arms Control Policy: A Historical Analysis (1945–2022)."* The study examines how U.S. public opinion has shaped and responded to arms control agreements concerning weapons of mass destruction (WMD), particularly nuclear arms. The project integrates historical polling data, media coverage analysis from *The New York Times*, and policy decisions to assess trends in sentiment and policy alignment.
 
-1. Clone the repository:
-git clone https://github.com/EthanMasters23/ArmsControlProject.git
+## Data Sources
 
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate
+The datasets analyzed in this research are derived from:
 
-python3 setup.py install
+- **Polling Data**: Collected from the Roper Center for Public Opinion Research, the Odum Institute, and other archives.
+- **Media Coverage**: Retrieved from *The New York Times* archive API, filtering front-page articles from 1945–2021.
+- **Policy Decisions**: Historical records of arms control treaties and agreements.
+
+## Repository Structure
+
 ```
-
-## Usage
-
-
-## Dependencies
-
-Dependencies can found in the requirements.txt
-
-
-## Project Structure
-
-```css
-Arms Control Project/
-├── Procfile
-├── README.md
-├── api_method
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   └── api_data_fetcher.cpython-311.pyc
-│   ├── api_data_fetcher.py
-│   ├── api_method_driver.py
-│   └── api_method_pipeline_log.log
-├── arms_control_app
-│   ├── __init__.py
-│   ├── arms_control_app.py
-│   └── article_count.py
-├── assets
-│   ├── Article_Data_ApiMethod_Raw_(1945-1946).json
-│   ├── Article_Data_Cleaned_Df_(1945-1946).json
-│   ├── Article_Data_RegexMethod_Raw_(1945-1946).json
-│   ├── PollingData.csv
-│   └── roper-folder-toplines-asof-20230127.csv
-├── lib
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── data_cleaner.cpython-311.pyc
-│   │   └── data_visualization.cpython-311.pyc
-│   ├── data_cleaner.py
-│   └── data_visualization.py
-├── polling_data
-│   ├── __init__.py
-│   └── polling_data_compiler.py
-├── regex_method
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── article_stats_fetcher.cpython-311.pyc
-│   │   └── regex_data_fetcher.cpython-311.pyc
-│   ├── article_stats_fetcher.py
-│   ├── regex_data_fetcher.py
-│   └── regex_method_driver.py
-├── requirements.txt
-├── setup.py
-└── testing.py
+Arms_Control_Research/
+│── data/                     # Raw and processed datasets
+│── scripts/                  # Python scripts for data analysis
+│── figures/                  # Generated figures and plots
+│── latex/                    # LaTeX files for the research paper
+│── references/               # Bibliography and citation files (.bib)
+│── results/                  # Output tables and processed datasets
+│── README.md                 # Project documentation (this file)
 ```
 
 ## Arms Control Dash Application
@@ -99,3 +55,4 @@ This Dash app allows users to search for public opinion research data by year an
 
 - 📧 **Email**: [ethansmasters@outlook.com](mailto:ethansmasters@outlook.com)
 - 🔗 **LinkedIn**: [LinkedIn](https://www.linkedin.com/in/ethan-masters/)
+- 
