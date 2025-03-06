@@ -12,19 +12,6 @@ The datasets analyzed in this research are derived from:
 - **Media Coverage**: Retrieved from *The New York Times* archive API, filtering front-page articles from 1945–2021.
 - **Policy Decisions**: Historical records of arms control treaties and agreements.
 
-## Repository Structure
-
-```
-Arms_Control_Research/
-│── data/                     # Raw and processed datasets
-│── scripts/                  # Python scripts for data analysis
-│── figures/                  # Generated figures and plots
-│── latex/                    # LaTeX files for the research paper
-│── references/               # Bibliography and citation files (.bib)
-│── results/                  # Output tables and processed datasets
-│── README.md                 # Project documentation (this file)
-```
-
 ## Arms Control Dash Application
 
 This application analyzes public opinion research data and provides interactive visualizations to explore the trends.
@@ -32,11 +19,6 @@ This application analyzes public opinion research data and provides interactive 
 ### Description
 This Dash app allows users to search for public opinion research data by year and month. It provides interactive graphs and charts to visualize the data dynamically.
 
-### Resources
-- [Screenshots](screenshots/)
-- [Demo GIF](demo.gif)
-- [Demo Scripts](demo_scripts/)
-- [Documentation](docs/)
 
 ## View the Full Literature Review
 [📄 View Research Paper (PDF)](https://github.com/EthanMasters23/Arms_Control_Research/blob/main/assets/Historical_Analysis_of_Public_Opinion_on_Arms_Control.pdf).
