@@ -1,0 +1,24 @@
+%% Definiciones de cuadros
+
+\definecolor{anibalMorao}{HTML}{3366CC}
+
+\newtcolorbox[auto counter,number within=section]{importanteBoxNumerado}[2][]{enhanced, colback=blue!5,colframe=blue!50,boxrule=0.4mm, attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight}, varwidth boxed title*=-3cm, boxed title style={frame code={ \path[fill=tcbcolback!30!black] ([yshift=-1mm,xshift=-1mm]frame.north west) arc[start angle=0,end angle=180,radius=1mm] ([yshift=-1mm,xshift=1mm]frame.north east) arc[start angle=180,end angle=0,radius=1mm]; \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black, middle color=tcbcolback!80!black] ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east) [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+-- (frame.south east) -- (frame.south west)
+-- ([xshift=-1mm,yshift=-1mm]frame.north west) [sharp corners]-- cycle; },interior engine=empty, }, fonttitle=\bfseries, title=Importante~\thetcbcounter. #2,#1}
+
+\newtcolorbox[auto counter,number within=section]{destacadoBox}[2][]{enhanced,
+colback=blue!5,colframe=blue!50,boxrule=0.4mm, attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight}, varwidth boxed title*=-3cm, boxed title style={frame code={ \path[fill=tcbcolback!30!black] ([yshift=-1mm,xshift=-1mm]frame.north west) arc[start angle=0,end angle=180,radius=1mm] ([yshift=-1mm,xshift=1mm]frame.north east) arc[start angle=180,end angle=0,radius=1mm]; \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black, middle color=tcbcolback!80!black] ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east) [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+-- (frame.south east) -- (frame.south west)
+-- ([xshift=-1mm,yshift=-1mm]frame.north west) [sharp corners]-- cycle; },interior engine=empty, }, fonttitle=\bfseries, title= #2,#1}
+
+\newtcolorbox[auto counter,number within=section]{ejemploBoxNumerado}[2][]{enhanced,
+colback=white,colframe=green!50,boxrule=0.4mm, attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight}, varwidth boxed title*=-3cm, boxed title style={frame code={ \path[fill=tcbcolback!30!black] ([yshift=-1mm,xshift=-1mm]frame.north west) arc[start angle=0,end angle=180,radius=1mm] ([yshift=-1mm,xshift=1mm]frame.north east) arc[start angle=180,end angle=0,radius=1mm]; \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black, middle color=tcbcolback!80!black] ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east) [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+-- (frame.south east) -- (frame.south west)
+-- ([xshift=-1mm,yshift=-1mm]frame.north west) [sharp corners]-- cycle; },interior engine=empty, }, fonttitle=\bfseries, title=Ejemplo~\thetcbcounter. #2,#1}
+
+\newtcolorbox[auto counter,number within=section]{ejercicioBoxNumerado}[2][]{enhanced,
+colback=red!5,colframe=red!50,boxrule=0.4mm, attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight}, varwidth boxed title*=-3cm, boxed title style={frame code={ \path[fill=tcbcolback!30!black] ([yshift=-1mm,xshift=-1mm]frame.north west) arc[start angle=0,end angle=180,radius=1mm] ([yshift=-1mm,xshift=1mm]frame.north east) arc[start angle=180,end angle=0,radius=1mm]; \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black, middle color=tcbcolback!80!black] ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east) [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+-- (frame.south east) -- (frame.south west)
+-- ([xshift=-1mm,yshift=-1mm]frame.north west) [sharp corners]-- cycle; },interior engine=empty, }, fonttitle=\bfseries, title=Ejercicio~\thetcbcounter. #2,#1}
+
+\newtcolorbox[auto counter,number within=section]{notaNumerada}[2][]{colbacktitle=black!2!white, coltitle=red!70!black,fonttitle=\bfseries,title=Nota~\thetcbcounter. #2,#1,boxrule=0.1mm,colback=black!2}
