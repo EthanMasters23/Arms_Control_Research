@@ -31,7 +31,7 @@ This Dash app allows users to search for public opinion research data by year an
 @misc{Masters2022,
   author = {Ethan Masters},
   title = {Historical Analysis: Public v Policy Opinion on Arms Control},
-  year = {2022},
+  year = {2023},
   url = {https://github.com/EthanMasters23/Arms_Control_Research}
 }
 ```
