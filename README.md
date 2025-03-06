@@ -83,5 +83,19 @@ This Dash app allows users to search for public opinion research data by year an
 - [Documentation](docs/)
 
 
+## 📖 Citation & Contribution Guidelines
 
-## License
+### 📌 **How to Cite This Work**
+```bibtex
+@misc{Masters2022,
+  author = {Ethan Masters},
+  title = {Historical Analysis: Public v Policy Opinion on Arms Control},
+  year = {2022},
+  url = {https://github.com/EthanMasters23/Arms_Control_Research}
+}
+```
+
+## 📬 Contact
+
+- 📧 **Email**: [ethansmasters@outlook.com](mailto:ethansmasters@outlook.com)
+- 🔗 **LinkedIn**: [LinkedIn](https://www.linkedin.com/in/ethan-masters/)
