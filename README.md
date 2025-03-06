@@ -38,6 +38,9 @@ This Dash app allows users to search for public opinion research data by year an
 - [Demo Scripts](demo_scripts/)
 - [Documentation](docs/)
 
+## View the Full Literature Review
+[📄 View Research Paper (PDF)](https://github.com/EthanMasters23/Arms_Control_Research/blob/main/assets/Historical_Analysis_of_Public_Opinion_on_Arms_Control.pdf).
+
 
 ## 📖 Citation & Contribution Guidelines
 
